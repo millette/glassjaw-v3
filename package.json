@@ -1,15 +1,30 @@
 {
   "name": "glassjaw-v3",
   "version": "0.0.0",
+  "author": "Robin Millette <robin@millette.info>",
   "scripts": {
-    "dev": "next",
-    "build": "next build",
-    "start": "next start"
+    "dev": "standard && n use 8.0.0 server",
+    "build": "standard && next build",
+    "now-build": "next build",
+    "start": "NODE_ENV=production n use 8.0.0 server",
+    "now-start": "NODE_ENV=production node server",
+    "lint": "standard",
+    "now": "standard && now -E",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "engine": {
+    "node": ">=7.6"
   },
   "dependencies": {
+    "koa": "^2.2.0",
+    "koa-router": "^7.2.0",
     "next": "beta",
+    "nprogress": "^0.2.0",
     "pouchdb-browser": "^6.2.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4"
+  },
+  "devDependencies": {
+    "standard": "^10.0.2"
   }
 }
