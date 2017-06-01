@@ -27,11 +27,19 @@ export default class MyPage extends React.Component {
   render () {
     return <div>
       <Header />
-      <h2>
-        <Link href='/'>
-          <a>ROWS</a>
-        </Link>
-      </h2>
+      <ul>
+        <li>
+          <Link href='/'>
+            <a>Home</a>
+          </Link>
+        </li>
+        <li>
+          <Link href='/about'>
+            <a>About</a>
+          </Link>
+        </li>
+      </ul>
+      <h1>Home</h1>
       {this.rows()}
     </div>
   }
