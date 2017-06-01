@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import Header from '../components/progress'
 import Pouchdb from 'pouchdb-browser'
 
 export default class MyPage extends React.Component {
@@ -25,6 +26,7 @@ export default class MyPage extends React.Component {
 
   render () {
     return <div>
+      <Header />
       <h2>
         <Link href='/'>
           <a>ROWS</a>
