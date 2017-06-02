@@ -9,7 +9,6 @@ export default class MyDocument extends Document {
   }
 
   render () {
-    // return <html>
     return <html lang='fr' manifest='/the.appcache'>
       <body>
         <Main />
