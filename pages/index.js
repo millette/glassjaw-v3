@@ -15,13 +15,19 @@ export default class MyPage extends React.Component {
 
   rows () {
     if (this.props.rows) {
-      return this.props.rows.map((row) => <dl>
-        <dt>{row.id}</dt>
-        <dd>{row.value.rev}</dd>
-      </dl>)
+      return this.props.rows.map((row) => <div>
+        <p>The content!</p>
+        <dl>
+          <dt>{row.id}</dt>
+          <dd>{row.value.rev}</dd>
+        </dl>
+      </div>)
     }
 
-    return <p>Server side...</p>
+    return <div>
+      <p>Server side...</p>
+      <p>Content to come.</p>
+    </div>
   }
 
   render () {

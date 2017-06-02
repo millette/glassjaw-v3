@@ -17,4 +17,6 @@ export default () => <div>
     </li>
   </ul>
   <h1>About</h1>
+  <p>Punch and stuff.</p>
+  <p>Rest to follow.</p>
 </div>
