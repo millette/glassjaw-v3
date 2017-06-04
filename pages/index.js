@@ -3,13 +3,27 @@ import Link from 'next/link'
 import Header from '../components/progress'
 import Pouchdb from 'pouchdb-core'
 
-Pouchdb.plugin(require('pouchdb-adapter-http'))
-
 const cfg = {
   db: false,
   remote: 'http://localhost:5993/gj-v3',
   local: 'mooya'
 }
+
+const initClientDb = () => Pouchdb
+  .plugin(require('pouchdb-adapter-idb'))
+  .plugin(require('pouchdb-adapter-websql'))
+  .plugin(require('pouchdb-replication'))
+
+const syncClientDb = () => Pouchdb
+  .sync(cfg.remote, cfg.local, { live: true, retry: true })
+  .on('active', () => console.log('ACTIVE'))
+  .on('change', (info) => console.log('CHANGE', info))
+  .on('complete', (info) => console.log('COMPLETE', info))
+  .on('paused', (err) => console.log('PAUSED', err))
+  .on('denied', (err) => console.log('DENIED', err))
+  .on('error', (err) => console.log('ERROR', err))
+
+Pouchdb.plugin(require('pouchdb-adapter-http'))
 
 export default class MyPage extends React.Component {
   static async getInitialProps (oy) {
@@ -19,17 +33,8 @@ export default class MyPage extends React.Component {
     } else {
       // client side
       if (!cfg.db) {
-        Pouchdb
-          .plugin(require('pouchdb-adapter-idb'))
-          .plugin(require('pouchdb-adapter-websql'))
-          .plugin(require('pouchdb-replication'))
-          .sync(cfg.remote, cfg.local, { live: true, retry: true })
-          .on('active', () => console.log('ACTIVE'))
-          .on('change', (info) => console.log('CHANGE', info))
-          .on('complete', (info) => console.log('COMPLETE', info))
-          .on('paused', (err) => console.log('PAUSED', err))
-          .on('denied', (err) => console.log('DENIED', err))
-          .on('error', (err) => console.log('ERROR', err))
+        initClientDb()
+        syncClientDb()
         cfg.db = new Pouchdb(cfg.local)
       }
     }
