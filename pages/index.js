@@ -2,23 +2,17 @@ import React from 'react'
 import Link from 'next/link'
 import Header from '../components/progress'
 import Pouchdb from 'pouchdb-core'
-// import utils from '../utils'
 
 Pouchdb.plugin(require('pouchdb-adapter-http'))
 
 const cfg = {
   db: false,
   remote: 'http://localhost:5993/gj-v3',
-  // remoteDb: 'gj-v3',
   local: 'mooya'
 }
 
 export default class MyPage extends React.Component {
   static async getInitialProps (oy) {
-    // cfg.remote = ['http://localhost:5993', cfg.remoteDb].join('/')
-    // cfg.remote = [utils.dbUrl(oy), cfg.remoteDb].join('/')
-    // console.log('REMOTE:', cfg.remote)
-    // if (!cfg.remote) { cfg.remote = [utils.dbUrl(oy), cfg.remoteDb].join('/') }
     if (oy && oy.req) {
       // server side
       if (!cfg.db) { cfg.db = new Pouchdb(cfg.remote) }
