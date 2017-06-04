@@ -7,7 +7,7 @@ Pouchdb.plugin(require('pouchdb-adapter-http'))
 
 const cfg = {
   db: false,
-  remote: 'http://localhost:5993/gj-v3',
+  remote: 'http://localhost:3000/db/gj-v3',
   local: 'mooya'
 }
 
