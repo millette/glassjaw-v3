@@ -1,21 +1,50 @@
 import React from 'react'
 import Link from 'next/link'
 import Header from '../components/progress'
-import Pouchdb from 'pouchdb-browser'
+import Pouchdb from 'pouchdb-core'
+// import utils from '../utils'
+
+Pouchdb.plugin(require('pouchdb-adapter-http'))
+
+const cfg = {
+  db: false,
+  remote: 'http://localhost:5993/gj-v3',
+  // remoteDb: 'gj-v3',
+  local: 'mooya'
+}
 
 export default class MyPage extends React.Component {
   static async getInitialProps (oy) {
-    // server side
-    if (oy && oy.req) { return { rows: false } }
-
-    const db = new Pouchdb('mooya')
-    // await db.post({ now: new Date().toISOString(), one: 'thing' })
-    return db.allDocs()
+    // cfg.remote = ['http://localhost:5993', cfg.remoteDb].join('/')
+    // cfg.remote = [utils.dbUrl(oy), cfg.remoteDb].join('/')
+    // console.log('REMOTE:', cfg.remote)
+    // if (!cfg.remote) { cfg.remote = [utils.dbUrl(oy), cfg.remoteDb].join('/') }
+    if (oy && oy.req) {
+      // server side
+      if (!cfg.db) { cfg.db = new Pouchdb(cfg.remote) }
+    } else {
+      // client side
+      if (!cfg.db) {
+        Pouchdb
+          .plugin(require('pouchdb-adapter-idb'))
+          .plugin(require('pouchdb-adapter-websql'))
+          .plugin(require('pouchdb-replication'))
+          .sync(cfg.remote, cfg.local, { live: true, retry: true })
+          .on('active', () => console.log('ACTIVE'))
+          .on('change', (info) => console.log('CHANGE', info))
+          .on('complete', (info) => console.log('COMPLETE', info))
+          .on('paused', (err) => console.log('PAUSED', err))
+          .on('denied', (err) => console.log('DENIED', err))
+          .on('error', (err) => console.log('ERROR', err))
+        cfg.db = new Pouchdb(cfg.local)
+      }
+    }
+    return cfg.db.allDocs()
   }
 
   rows () {
     if (this.props.rows) {
-      return this.props.rows.map((row) => <div>
+      return this.props.rows.map((row) => <div key={row.id}>
         <p>The content!</p>
         <dl>
           <dt>{row.id}</dt>
